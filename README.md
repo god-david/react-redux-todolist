@@ -13,3 +13,4 @@ Runs the app in the development mode.<br>
 Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
 
 ### 3. `npm run build`
+![img]("https://github.com/god-david/react-redux-todolist/blob/master/public/redux.gif")
