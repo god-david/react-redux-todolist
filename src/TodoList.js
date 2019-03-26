@@ -88,8 +88,3 @@ class TodoList extends Component {
 }
 
 export default TodoList;
-
-/*
-* 注：
-* 要想改变React中的数据，先要去派发一个action, action 会通过diapatch方法传递给store， store会把之前数据和action 转发给reducer，reducer是一个函数，它接受到state和action做了一些处理之后，会返回一个新的state给到store，store用这个新的state替换掉之前store里的数据，然后store数据发生改变之后,React组件会感知到组件发生改变，这个时候它会从store中重新取数据。更新组件的内容，页面就跟着发生变化了。
-*/ 
