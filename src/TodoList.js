@@ -4,7 +4,8 @@ import { Input } from 'antd';
 import { Button } from 'antd';
 import { List, Typography } from 'antd';
 import store from './store'
-import {CHNAGE_INPUT_VALUE, ADD_TODO_ITEM, DELETE_TODO_ITEM} from './store/actionTypes'
+
+import {getInputChangeAction, getDeleteItemAction, getAddItemAction} from './store/actionCreators'
 
 class TodoList extends Component {
   constructor(props) {
@@ -18,10 +19,7 @@ class TodoList extends Component {
   }
   handleInputChange = (e) => {
     const value = e.target.value
-    const action = {
-      type: CHNAGE_INPUT_VALUE,
-      value: value
-    }
+    const action = getInputChangeAction(value)
     store.dispatch(action)
     
     this.setState({
@@ -39,17 +37,12 @@ class TodoList extends Component {
       alert('填写值不能为空')
       return
     }
-    const action = {
-      type: ADD_TODO_ITEM
-    }
+    const action = getAddItemAction()
     store.dispatch(action)
   }
 
   handleDeleteClick = (index) => {
-    const action = {
-      type: DELETE_TODO_ITEM, 
-      index
-    }
+    const action = getDeleteItemAction(index)
     store.dispatch(action)
   }
 
