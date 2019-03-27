@@ -1,13 +1,12 @@
 import React, { Component } from 'react';
-import 'antd/dist/antd.css';
-import { Input } from 'antd';
-import { Button } from 'antd';
-import { List, Typography } from 'antd';
+import { List, Input, Button } from 'antd';
 import store from './store'
+import axios from 'axios'
+import {getInputChangeAction, getDeleteItemAction, getAddItemAction, getInitAction} from './store/actionCreators'
 
-import {getInputChangeAction, getDeleteItemAction, getAddItemAction} from './store/actionCreators'
+import 'antd/dist/antd.css';
 
-class TodoList extends Component {
+export default class TodoList extends Component {
   constructor(props) {
     super(props)
 
@@ -22,9 +21,9 @@ class TodoList extends Component {
     const action = getInputChangeAction(value)
     store.dispatch(action)
     
-    this.setState({
+    this.setState(() => ({
       inputValueJudge: value
-    })
+    }))
   }
 
   handleStoreChange = () => {
@@ -33,7 +32,8 @@ class TodoList extends Component {
   }
 
   handleBtnClick = () => {
-    if (this.state.inputValueJudge == undefined || this.state.inputValueJudge.trim() === '') {
+    // console.log("inputValueJudge: ",this.state.inputValueJudge)
+    if (this.state.inputValueJudge == undefined) {
       alert('填写值不能为空')
       return
     }
@@ -42,42 +42,63 @@ class TodoList extends Component {
   }
 
   handleDeleteClick = (index) => {
+    // console.log(index)
     const action = getDeleteItemAction(index)
     store.dispatch(action)
   }
 
+  // componentDidMount() {
+  //   axios.get('/list.json').then((res) => {
+  //     const data = res.data
+  //     console.log(data)
+  //     const action = getInitAction(data)
+  //     store.dispatch(action)
+  //   })
+  // }
+
   render() {
+    // console.log('--render---',this.state.inputValueJudge)
     const style={
       width: "250px",
       marginLeft: "15px",
       marginRight: "15px"
     }
     return (
-      <div style={{marginTop: "20px"}}> 
-        <div>
-          <Input 
-            value={this.state.inputValue} 
-            placeholder="Basic usage" 
-            style={style} 
-            onChange={this.handleInputChange}
-          />
-          <Button type="primary" onClick={this.handleBtnClick}>提交</Button>
-        </div>
-        <List
-          style={{marginLeft: "15px", marginTop: "20px",width: "250px"}}
-          bordered
-          dataSource={this.state.list}
-          renderItem={
-           (item, index) => (
-              <List.Item onClick={this.handleDeleteClick.bind(this, index)}>
-                <Typography.Text mark></Typography.Text> 
-                {item}
-              </List.Item>
-            )}
-        />
-      </div>
+      <TodoListUI
+        style={style}
+        inputValue={this.state.inputValue}
+        handleInputChange={this.handleInputChange}
+        handleBtnClick={this.handleBtnClick}
+        list={this.state.list}
+        handleDeleteClick={this.handleDeleteClick}
+      />
     );
   }
 }
 
-export default TodoList;
+const TodoListUI = ({style, inputValue, handleInputChange, handleBtnClick, list, handleDeleteClick}) => {
+  return (
+    <div style={{marginTop: "20px"}}> 
+      <div>
+        <Input 
+          value={inputValue} 
+          placeholder="Basic usage" 
+          style={style} 
+          onChange={handleInputChange}
+        />
+        <Button type="primary" onClick={handleBtnClick}>提交</Button>
+      </div>
+      <List
+        style={{marginLeft: "15px", marginTop: "20px",width: "250px"}}
+        bordered
+        dataSource={list}
+        renderItem={
+          (item, index) => (
+            <List.Item onClick={() => handleDeleteClick(index)}>
+              {item}
+            </List.Item>
+          )}
+      />
+    </div>
+  )
+}
